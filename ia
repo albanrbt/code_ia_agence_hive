@@ -352,6 +352,7 @@ int ia_2(int maps_ia[][NB_BLOCS_HAUTEUR], int x, int y, int points, int item, in
 
 
 
+
 C ICI !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
 
 
@@ -413,4 +414,135 @@ int ia_2(int maps_ia[][NB_BLOCS_HAUTEUR], int x, int y, int points, int item, in
         }
     }
 
+}
+
+
+
+PROTOTYPE: Défense/attaque
+int ia_1(int maps_ia[][NB_BLOCS_HAUTEUR], int x, int y, int points, int item, int tours)
+{
+    {
+    int i, j, t = 0, r = 0;
+
+    while(tours>200)
+    {
+        t = 0;
+        r = 0;
+        for (i = 0; i< x; i++)
+        {
+            for (j = 0; j< y; j++)
+            {
+                if (maps_ia[i][j]== RED_RUPEE || maps_ia[i][j]== BLUE_RUPEE || maps_ia[i][j]== GREEN_RUPEE)
+                {
+                    t = i;
+                    r = j;
+                }
+            }
+        }
+        if (t == 0)
+        {
+            for (i = NB_BLOCS_HAUTEUR; i> x; i--)
+            {
+                for (j = NB_BLOCS_LARGEUR; j> y; j--)
+                {
+                    if (maps_ia[i][j]== RED_RUPEE || maps_ia[i][j]== BLUE_RUPEE || maps_ia[i][j]== GREEN_RUPEE)
+                    {
+                        t = i;
+                        r = j;
+                    }
+                }
+            }
+        }
+
+        if (t == 0)
+        {
+            return EPEE_BAS;
+        }
+
+        if (t+1 < x)
+        {
+            return LEFT;
+        }
+        else if (t+1 > x)
+        {
+            return RIGHT;
+        }
+        else if (r>y)
+        {
+            return DOWN;
+        }
+        /*
+        x croissant et y décroissant (car avec SDL, on part généralement d'en haut à gauche :
+                                       l'axe des x normal et l'axe des y qui part du haut vers le bas)
+        maps_ia[x-1][y] = gauche
+        maps_ia[x+1][y] = droite
+        maps_ia[x][y-1] = haut
+        maps_ia[x][y+1] = bas
+
+        */
+        else if(maps_ia[x-1][y] == IA || maps_ia[x+1][y] == IA||maps_ia[x][y-1] == IA||maps_ia[x][y+1] == IA)/// si il y a un joueur dans la case adjacente
+        {///cas où il y a 1 seul ia autour de nous
+            /// on traduit par exemple un ia qu'à droite par non(ia gauche)et non(ia haut) et non (ia bas) (à vérifier quand même)
+            if(!(maps_ia[x-1][y] == IA)&& !(maps_ia[x+1][y] == IA)&& !(maps_ia[x][y-1] == IA)) // un ia en dessous
+            {   if(points > 5)
+                {
+                    return EPEE_BAS;
+                }
+                else
+                {
+                   return PARER;
+                }
+            }
+            else if(!(maps_ia[x-1][y] == IA)&& !(maps_ia[x+1][y] == IA)&& !(maps_ia[x][y+1] == IA)) // un ia au dessus
+            {   /// on attaque que si l'on a au moins assez de vie pour survivre au cas où (normalement c'est 5 rubis)
+                if(points > 5)// à moifier pour trouver un moyen d'être sûr d'avoir au moins 5 rubis
+                {
+                    return EPEE_HAUT;
+                }
+                else /// si on a pas assez de vie
+                {
+                   return PARER;
+                }
+            }
+            else if(!(maps_ia[x-1][y] == IA)&& !(maps_ia[x][y-1] == IA)&& !(maps_ia[x][y+1] == IA)) // un ia à droite
+            {
+                if(points > 5)
+                {
+                   return EPEE_DROITE;
+                }
+                else
+                {
+                   return PARER;
+                }
+
+            }
+            else if(!(maps_ia[x][y-1] == IA)&& !(maps_ia[x+1][y] == IA)&& !(maps_ia[x][y+1] == IA)) // un ia à gauche
+            {
+                if(points > 5)
+                {
+                    return EPEE_GAUCHE;
+                }
+                else
+                {
+                   return PARER;
+                }
+            }
+            else/// si 2 ia ou + autour de nous -> on pare pour éviter de se faire prendre
+            {
+                return PARER;
+            }
+
+        }
+        else
+        {
+            return UP;
+        }
+
+
+
+
+
+    }
+
+}
 }
