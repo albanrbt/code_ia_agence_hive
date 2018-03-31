@@ -349,3 +349,68 @@ int ia_2(int maps_ia[][NB_BLOCS_HAUTEUR], int x, int y, int points, int item, in
 }*/
 
 #endif
+
+
+
+C ICI !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+
+
+
+int ia_2(int maps_ia[][NB_BLOCS_HAUTEUR], int x, int y, int points, int item, int tours)
+{
+    int i, j, t = 0, r = 0;
+
+    while(tours>200)
+    {
+        t = 0;
+        r = 0;
+        for (i = 0; i< x; i++)
+        {
+            for (j = 0; j< y; j++)
+            {
+                if (maps_ia[i][j]== RED_RUPEE || maps_ia[i][j]== BLUE_RUPEE || maps_ia[i][j]== GREEN_RUPEE)
+                {
+                    t = i;
+                    r = j;
+                }
+            }
+        }
+        if (t == 0)
+        {
+            for (i = NB_BLOCS_HAUTEUR; i> x; i--)
+            {
+                for (j = NB_BLOCS_LARGEUR; j> y; j--)
+                {
+                    if (maps_ia[i][j]== RED_RUPEE || maps_ia[i][j]== BLUE_RUPEE || maps_ia[i][j]== GREEN_RUPEE)
+                    {
+                        t = i;
+                        r = j;
+                    }
+                }
+            }
+        }
+
+        if (t == 0)
+        {
+            return EPEE_BAS;
+        }
+
+        if (t+1 < x)
+        {
+            return LEFT;
+        }
+        else if (t+1 > x)
+        {
+            return RIGHT;
+        }
+        else if (r>y)
+        {
+            return DOWN;
+        }
+        else
+        {
+            return UP;
+        }
+    }
+
+}
