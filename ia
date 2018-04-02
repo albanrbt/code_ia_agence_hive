@@ -546,3 +546,283 @@ int ia_1(int maps_ia[][NB_BLOCS_HAUTEUR], int x, int y, int points, int item, in
 
 }
 }
+
+
+
+DERNIERE VERSION QUI RAMASSE TT ET COMMENCE STRATEGIE D4EVITEMENT
+
+
+int ia_2(int maps_ia[][NB_BLOCS_HAUTEUR], int x, int y, int points, int item, int tours)
+{
+    int i, j, t = 0, r = 0;
+
+    while(tours>1)
+    {
+        t = 0;
+        r = 0;
+        for (i = 0; i< x; i++)
+        {
+            for (j = 0; j< y; j++)
+            {
+                if (maps_ia[i][j]== RED_RUPEE || maps_ia[i][j]== BLUE_RUPEE || maps_ia[i][j]== GREEN_RUPEE)
+                {
+                    t = i;
+                    r = j;
+                }
+            }
+             for (j = NB_BLOCS_LARGEUR; j> y; j--)
+                {
+                    if (maps_ia[i][j]== RED_RUPEE || maps_ia[i][j]== BLUE_RUPEE || maps_ia[i][j]== GREEN_RUPEE)
+                    {
+                        t = i;
+                        r = j;
+                    }
+                }
+        }
+        if (t == 0)
+        {
+            for (i = NB_BLOCS_HAUTEUR; i> x; i--)
+            {
+            for (j = 0; j< y; j++)
+            {
+                if (maps_ia[i][j]== RED_RUPEE || maps_ia[i][j]== BLUE_RUPEE || maps_ia[i][j]== GREEN_RUPEE)
+                {
+                    t = i;
+                    r = j;
+                }
+            }
+            for (j = NB_BLOCS_LARGEUR; j> y; j--)
+                {
+                    if (maps_ia[i][j]== RED_RUPEE || maps_ia[i][j]== BLUE_RUPEE || maps_ia[i][j]== GREEN_RUPEE)
+                    {
+                        t = i;
+                        r = j;
+                    }
+                }
+            }
+        }
+
+        if (t == 0)
+        {
+       for (i = 0; i< x; i++)
+        {
+            for (j = 0; j< y; j++)
+            {
+                if (maps_ia[i][j]== POT)
+                {
+                    t = i;
+                    r = j;
+                }
+            }
+             for (j = NB_BLOCS_LARGEUR; j> y; j--)
+                {
+                    if (maps_ia[i][j]== POT)
+                    {
+                        t = i;
+                        r = j;
+                    }
+                }
+        }
+        if (t == 0)
+        {
+            for (i = NB_BLOCS_HAUTEUR; i> x; i--)
+            {
+            for (j = 0; j< y; j++)
+            {
+                if (maps_ia[i][j]== POT)
+                {
+                    t = i;
+                    r = j;
+                }
+            }
+            for (j = NB_BLOCS_LARGEUR; j> y; j--)
+                {
+                    if (maps_ia[i][j]== POT)
+                    {
+                        t = i;
+                        r = j;
+                    }
+                }
+            }
+        }
+        }
+        if (t==0 && points >= 20)
+        {
+                for (i = 0; i< x; i++)
+        {
+            for (j = 0; j< y; j++)
+            {
+                if (maps_ia[i][j]== IA)
+                {
+                    t = i;
+                    r = j;
+                }
+            }
+             for (j = NB_BLOCS_LARGEUR; j> y; j--)
+                {
+                    if (maps_ia[i][j]== IA)
+                    {
+                        t = i;
+                        r = j;
+                    }
+                }
+        }
+        if (t == 0)
+        {
+            for (i = NB_BLOCS_HAUTEUR; i> x; i--)
+            {
+            for (j = 0; j< y; j++)
+            {
+                if (maps_ia[i][j]== IA)
+                {
+                    t = i;
+                    r = j;
+                }
+            }
+            for (j = NB_BLOCS_LARGEUR; j> y; j--)
+                {
+                    if (maps_ia[i][j]== IA)
+                    {
+                        t = i;
+                        r = j;
+                    }
+                }
+            }
+        }
+        }
+       /* if (maps_ia[x+1][y]==IA)
+        {
+            if (points >= 20)
+            {
+                return EPEE_DROITE;
+            }
+            else
+            {
+                return PARER;
+            }
+        }
+        if (maps_ia[x-1][y]==IA)
+        {
+            if (points >= 20)
+            {
+                return EPEE_GAUCHE;
+            }
+            else
+            {
+                return PARER;
+            }
+        }
+        if (maps_ia[x][y+1]==IA)
+        {
+            if (points >= 20)
+            {
+                return EPEE_HAUT;
+            }
+            else
+            {
+                return PARER;
+            }
+        }
+        if (maps_ia[x][y-1]==IA)
+        {
+            if (points >= 20)
+            {
+                return EPEE_BAS;
+            }
+            else
+            {
+                return PARER;
+            }
+        }*/
+        /// partie fuite de l'ia
+        if (maps_ia[x+2][y]==IA)
+        {
+           if (x == 0)
+           {
+               if (y == 0)
+               {
+                   return BAS;
+               }
+               else if (y == NB_BLOCS_LARGEUR)
+               {
+                   return HAUT;
+               }
+               else
+               {
+                   return GAUCHE;
+               }
+           }
+        }
+        if (maps_ia[x-2][y]==IA)
+        {
+             if (x == NB_BLOCS_HAUTEUR)
+           {
+               if (y == 0)
+               {
+                   return BAS;
+               }
+               else if (y == NB_BLOCS_LARGEUR)
+               {
+                   return HAUT;
+               }
+               else
+               {
+                   return DROITE;
+               }
+           }
+        }
+        if (maps_ia[x][y+2]==IA)
+        {
+            if (y == NB_BLOCS_LARGEUR)
+           {
+               if (x == 0)
+               {
+                   return DROITE;
+               }
+               else if (x == NB_BLOCS_HAUTEUR)
+               {
+                   return GAUCHE;
+               }
+               else
+               {
+                   return BAS;
+               }
+           }
+        }
+        if (maps_ia[x][y-2]==IA)
+        {
+            if (y == 0)
+           {
+               if (x == 0)
+               {
+                   return DROITE;
+               }
+               else if (x == NB_BLOCS_HAUTEUR)
+               {
+                   return GAUCHE;
+               }
+               else
+               {
+                   return HAUT;
+               }
+           }
+        }
+        if (t+1 < x)
+        {
+            return LEFT;
+        }
+        else if (t+1 > x)
+        {
+            return RIGHT;
+        }
+        else if (r>y)
+        {
+            return DOWN;
+        }
+        else
+        {
+            return UP;
+        }
+    }
+
+}
