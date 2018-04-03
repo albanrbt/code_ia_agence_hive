@@ -826,3 +826,78 @@ int ia_2(int maps_ia[][NB_BLOCS_HAUTEUR], int x, int y, int points, int item, in
     }
 
 }
+
+
+
+
+NOUVELLE UPDATE
+
+
+int ia_1(int maps_ia[][NB_BLOCS_HAUTEUR], int x, int y, int points, int item, int tours)
+{
+    {
+    int i, j, t = 0, r = 0,a=150;
+
+    while(tours>1)
+    {
+        t = 0;
+        r = 0;
+        for (i = MINX; i< MAXX; i++)
+        {
+            for (j = MINY; j< MAXY; j++)
+            {
+                if (maps_ia[i][j]== RED_RUPEE || maps_ia[i][j]== BLUE_RUPEE || maps_ia[i][j]== GREEN_RUPEE)
+                {
+                    if ((abs(x-i)+abs(y-j))<a)
+                    {
+                    a = abs(x-i)+abs(y-j);
+                    t = i;
+                    r = j;
+                    }
+                }
+            }
+        }
+
+        if (t == 0)
+        {
+             for (i = MINX; i< MAXX; i++)
+        {
+            for (j = MINY; j< MAXY; j++)
+            {
+                if (maps_ia[i][j]== POT)
+                {
+                    if ((abs(x-i)+abs(y-j))<a)
+                    {
+                    a = abs(x-i)+abs(y-j);
+                    t = i;
+                    r = j;
+                    }
+                }
+            }
+        }
+        }
+        if (t == 0)
+        {
+            return PARER;
+        }
+
+        if (t+1 < x)
+        {
+            return LEFT;
+        }
+        else if (t+1 > x)
+        {
+            return RIGHT;
+        }
+        else if (r>y)
+        {
+            return DOWN;
+        }
+        else
+        {
+            return UP;
+        }
+    }
+
+    }
+}
