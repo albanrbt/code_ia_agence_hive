@@ -835,18 +835,19 @@ NOUVELLE UPDATE
 
 int ia_1(int maps_ia[][NB_BLOCS_HAUTEUR], int x, int y, int points, int item, int tours)
 {
-    {
+
     int i, j, t = 0, r = 0,a=150;
 
     while(tours>1)
     {
+        ///RUBIS+POT
         t = 0;
         r = 0;
         for (i = MINX; i< MAXX; i++)
         {
             for (j = MINY; j< MAXY; j++)
             {
-                if (maps_ia[i][j]== RED_RUPEE || maps_ia[i][j]== BLUE_RUPEE || maps_ia[i][j]== GREEN_RUPEE)
+                if (maps_ia[i][j]== RED_RUPEE || maps_ia[i][j]== BLUE_RUPEE || maps_ia[i][j]== GREEN_RUPEE || maps_ia[i][j]== POT)
                 {
                     if ((abs(x-i)+abs(y-j))<a)
                     {
@@ -858,24 +859,20 @@ int ia_1(int maps_ia[][NB_BLOCS_HAUTEUR], int x, int y, int points, int item, in
             }
         }
 
-        if (t == 0)
+        ///BOMBE
+        if (item == 1)
         {
-             for (i = MINX; i< MAXX; i++)
+            return BOMBE;
+        }
+        for (i = MINX; i< MAXX; i++)
         {
             for (j = MINY; j< MAXY; j++)
             {
-                if (maps_ia[i][j]== POT)
-                {
-                    if ((abs(x-i)+abs(y-j))<a)
-                    {
-                    a = abs(x-i)+abs(y-j);
-                    t = i;
-                    r = j;
-                    }
-                }
+                
             }
         }
-        }
+
+        ///DEPLACEMENT
         if (t == 0)
         {
             return PARER;
@@ -899,5 +896,4 @@ int ia_1(int maps_ia[][NB_BLOCS_HAUTEUR], int x, int y, int points, int item, in
         }
     }
 
-    }
 }
