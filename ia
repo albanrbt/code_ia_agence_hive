@@ -915,181 +915,165 @@ int ia_2(int maps_ia[][NB_BLOCS_HAUTEUR], int x, int y, int points, int item, in
 NOUVELLE UPDATE
 int ia_1(int maps_ia[][NB_BLOCS_HAUTEUR], int x, int y, int points, int item, int tours)
 {
-
     int i, j, t = 0, r = 0,z=150,c1=0,c2=0,ennemi = 0,bombeX=0,bombeY=0,bombe = 0;
-   float  a=0,b=0;
-    int faquin[20][2];
+    float  a=0,b=0;
+    int ia[20][2];
 
-        t = 0;
-        r = 0;
-        for (i = MINX; i< MAXX; i++)
+    t = 0;
+    r = 0;
+    for (i = MINX; i< MAXX; i++)
+    {
+        for (j = MINY; j< MAXY; j++)
         {
-            for (j = MINY; j< MAXY; j++)
+            ///VERIFICATION BOMBE AUTOUR DE L'IA
+            if (maps_ia[i][j] == BOMBE_MAP)
             {
-                if (maps_ia[i][j] == BOMBE_MAP)
+                bombeX = i;
+                bombeY = j;
+                if (abs(x-i)+abs(y-j)<=11)
                 {
-                    bombeX = i;
-                    bombeY = j;
-                    if (abs(x-i)+abs(y-j)<=11)
-                    {
-                        bombe = 1;
-                    }
+                    bombe = 1;
                 }
-
-                if (maps_ia[i][j]== RED_RUPEE || maps_ia[i][j]== BLUE_RUPEE || maps_ia[i][j]== GREEN_RUPEE || maps_ia[i][j] == POT)
+            }
+            ///RECUPERATION COORDONNEES RUBIS / POTS
+            if (maps_ia[i][j]== RED_RUPEE || maps_ia[i][j]== BLUE_RUPEE || maps_ia[i][j]== GREEN_RUPEE || maps_ia[i][j] == POT)
+            {
+                if ((abs(x-i)+abs(y-j))<z)
                 {
-
-                    if ((abs(x-i)+abs(y-j))<z)
-                    {
                     z = abs(x-i)+abs(y-j);
                     t = i;
                     r = j;
-                    }
-
                 }
-                 else if ((maps_ia[i][j]== IA) && (abs(x-i)+abs(y-j)!=0) )
-                 {
 
+            }
+            ///VERIFICATION IA ENNEMI AUTOUR DE L'IA
+            else if ((maps_ia[i][j]== IA) && (abs(x-i)+abs(y-j)!=0) )
+            {
                 if (abs(x-i)+abs(y-j)<=6)
-
-                 {
-
-                    faquin[c1][c2]= i;
+                {
+                    ia[c1][c2]= i;
                     c2+=1;
-                    faquin[c1][c2]= j;
+                    ia[c1][c2]= j;
                     c1+=1;
                     c2-=1;
                     ennemi = 1;
-
-                 }
                  }
             }
         }
-if (bombe == 1)
-{
-   if (abs(x-bombeX) > abs(y-bombeY))
-   {
-       if (x < bombeX)
+    }
+    ///POSER BOMBE
+    if ((maps_ia[x-2][y] == IA) || (maps_ia[x+2][y] == IA) || (maps_ia[x][y-2] == IA) || (maps_ia[x][y+2] == IA) || (maps_ia[x-1][y] == IA) || (maps_ia[x+1][y] == IA) || (maps_ia[x][y-1] == IA) || (maps_ia[x][y+1] == IA) || (maps_ia[x-3][y] == IA) || (maps_ia[x+3][y] == IA) || (maps_ia[x][y-3] == IA) || (maps_ia[x][y+3] == IA))
+    {
+        if (item == 1)
         {
-            return LEFT;
+            return BOMBE;
         }
-        else if (x > bombeX )
+    }
+    ///FUIR BOMBE
+    if (bombe == 1)
+    {
+        if (abs(x-bombeX) > abs(y-bombeY))
         {
-            return RIGHT;
+            if (x < bombeX)
+            {
+                return LEFT;
+            }
+            else if (x > bombeX )
+            {
+                return RIGHT;
+            }
         }
-   }
-      if (abs(x-bombeX) < abs(y-bombeY))
-   {
-       if (y > bombeY)
+        if (abs(x-bombeX) < abs(y-bombeY))
         {
-            return DOWN;
+            if (y > bombeY)
+            {
+                return DOWN;
+            }
+            else if (y < bombeY )
+            {
+                return UP;
+            }
         }
-        else if (y < bombeY )
-        {
-            return UP;
-        }
-   }
-}
-if (ennemi == 1)
+    }
+    ///FUIR ENNEMI
+    if (ennemi == 1)
     {
         c2 = 0;
         for (i=0; i< c1 ;i++)
         {
-            a = (x-faquin[i][c2])+a;
-            b= (y-faquin[i][c2+1])+b;
+            a = (x-ia[i][c2])+a;
+            b = (y-ia[i][c2+1])+b;
         }
         a = a/(c1);
         b = b/(c1);
-
-
-if (abs(a)>abs(b))
-{
-
-       if (a < 0)
+        if (abs(a)>abs(b))
         {
-            return LEFT;
+            if (a < 0)
+            {
+                return LEFT;
+            }
+            else if (a > 0 )
+            {
+                return RIGHT;
+            }
         }
-        else if (a > 0 )
+        if (abs(a)<abs(b))
         {
-            return RIGHT;
+            if (b > 0)
+            {
+                return DOWN;
+            }
+            else if (b < 0)
+            {
+                return UP;
+            }
         }
-}
-
-if (abs(a)<abs(b))
-{
-        if (b > 0)
+        if (abs(a)== abs(b))
         {
-            return DOWN;
+            return rand()%3;
         }
-        else if (b < 0)
-        {
-            return UP;
-        }
-}
-if (abs(a)== abs(b))
-{
-    return rand()%3;
-}
     }
-    if (item == 1)
-        {
-            return BOMBE;
-        }
-
-            if (t == 0)
-        {
-            if (item == 1)
-        {
-            return BOMBE;
-        }
-        else
-        {
+    ///RETOUR MILIEU DE CARTE
+    if (t == 0)
+    {
         if (abs(x-80) < abs(y-60) )
         {
-        if (y < 60)
-        {
-            return DOWN;
+            if (y < 60)
+            {
+                return DOWN;
+            }
+            else if (y > 60 )
+            {
+                return UP;
+            }
         }
-        else if (y > 60 )
-        {
-            return UP;
-        }
-        }
-
         if (abs(x-80) > abs(y-60) )
         {
-        if (x < 80)
-        {
-            return RIGHT;
+            if (x < 80)
+            {
+                return RIGHT;
+            }
+            else if (x > 80 )
+            {
+                return LEFT;
+            }
         }
-        else if (x > 80 )
-        {
-            return LEFT;
-        }
-        }
-
-        }
-        }
-
-
-
-        if (t+1 < x  )
-        {
-            return LEFT;
-        }
-        else if (t+1 > x)
-        {
-            return RIGHT;
-        }
-        else if (r>y )
-        {
-            return DOWN;
-        }
-        else
-        {
-            return UP;
-        }
-
-
-
+    }
+    ///DEPLACEMENT
+    if (t+1 < x  )
+    {
+        return LEFT;
+    }
+    else if (t+1 > x)
+    {
+        return RIGHT;
+    }
+    else if (r>y )
+    {
+        return DOWN;
+    }
+    else
+    {
+        return UP;
+    }
 }
