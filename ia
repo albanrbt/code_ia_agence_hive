@@ -81,7 +81,89 @@ void item(int maps[][NB_BLOCS_HAUTEUR], Player links[NB_PLAYER], int tours, Item
 /*
 Fonction qui renvoie un entier pour faire bouger l'IA
 */
+//// Chasse
 
+int i, j,t,r;
+
+
+
+        for (i = 0; i< x; i++)
+        {
+            for (j = 0; j< y; j++)
+            {
+                if (maps_ia[i][j]== IA)
+                {
+                    t = i;
+                    r = j;
+                }
+            }
+                 for (j = y; j< NB_BLOCS_LARGEUR; j++)
+                {
+                    if (maps_ia[i][j]== IA)
+                    {
+                        t = i;
+                        r = j;
+                    }
+                }
+
+        }
+        if (t == 0)
+        {
+            for (i = NB_BLOCS_HAUTEUR; i> x; i--)
+            {
+                if (maps_ia[i][j]== IA)
+                {
+                    t = i;
+                    r = j;
+                }
+                for (j = NB_BLOCS_LARGEUR; j> y; j++)
+                {
+                    if (maps_ia[i][j]== IA)
+                    {
+                        t = i;
+                        r = j;
+                    }
+                }
+            }
+        }
+
+        if (t == 0)
+        {
+            return DOWN;
+        }
+
+        if (t+1 < x)
+        {
+            return LEFT;
+        }
+        else if (t+1 > x)
+        {
+            return RIGHT;
+        }
+        else if (r>y)
+        {
+            return DOWN;
+        }
+        else
+        {
+            return UP;
+        }
+        
+        
+        
+        
+        /////FIN CHASSE
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
 int ia_1(int maps_ia[][NB_BLOCS_HAUTEUR], int x, int y, int points, int item, int tours)
 {
   int i, j,XR,YR,cas;
